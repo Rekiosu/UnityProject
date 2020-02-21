@@ -13,7 +13,9 @@ public class C_AR_PlaceObject : MonoBehaviour
     private ARSessionOrigin arOrigin;
     private ARRaycastManager arRayManager;
     private bool placementPoseValid = false;
+    public Camera arCam;
 
+    private AndroidJavaObject deviceCam = null;
 
     public C_AR_PlaceObject()
     {
@@ -24,6 +26,16 @@ public class C_AR_PlaceObject : MonoBehaviour
     {
         arOrigin = FindObjectOfType<ARSessionOrigin>();
         arRayManager = arOrigin.GetComponent<ARRaycastManager>();
+
+        if (deviceCam == null)
+        {
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+			AndroidJavaClass cameraClass = new AndroidJavaClass("android.hardware.Camera");
+			deviceCam = cameraClass.CallStatic<AndroidJavaObject>("open");
+                  FlashLight();    
+#endif
+        }
+
     }
     // Update is called once per frame
     void Update()
@@ -42,13 +54,13 @@ public class C_AR_PlaceObject : MonoBehaviour
         }
         else
         {
-            placementIndicator.SetActive(false);
+           placementIndicator.SetActive(false);
         }
     }
 
     private void UpdatePlacementPose()
     {
-        var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
+        var screenCenter = arCam.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var hits = new List<ARRaycastHit>();
         arRayManager.Raycast(screenCenter, hits);
 
@@ -58,5 +70,11 @@ public class C_AR_PlaceObject : MonoBehaviour
             placementPose = hits[0].pose;
         }
 
+    }
+    void FlashLight()
+    {
+        AndroidJavaObject cameraParameters = deviceCam.Call<AndroidJavaObject>("getParameters");
+      cameraParameters.Call("setFlashMode", "torch");
+        deviceCam.Call("setParameters", cameraParameters);
     }
 }

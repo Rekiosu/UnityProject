@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387806c2a078e8440891aa2a481ac048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turret: {fileID: 0}
+  turret: {fileID: 4576709452863641030}
   directionEnum: 4
 --- !u!1 &4576709452863641030
 GameObject:

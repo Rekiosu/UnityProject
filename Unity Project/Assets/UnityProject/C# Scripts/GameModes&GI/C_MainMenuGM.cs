@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class C_MainMenuGM : C_GameModeParent
 {
     public delegate void newScene();
     public event newScene   SceneChanged;
-    // Start is called before the first frame update
+    public string[] levels;
+    public GameObject UImanager;
+
     void Start()
     {
-        
+        //fire init chain here for UI
     }
 
     // Update is called once per frame
@@ -19,25 +22,42 @@ public class C_MainMenuGM : C_GameModeParent
     }
 
 
-    public void LevelChange(int level)
+    public void LevelChange(int levelID)
     {
-        switch (level)
-        {
-            case 0:
-              
-                break;
-            case 1:
+        ////foreach(string l in levels)
+        //{
+        //    if (levels[])
+        //    {
                
-                break;
-            case 2:
+        //    }
+        //}
+
+
+        SceneManager.LoadScene(levels[levelID]);
+
+        //switch (levelID)
+        //{
+        //    case 0:
+        //        //   Application.LoadLevel(1);
+        //        SceneManager.LoadScene(levels[0]);
+        //        break;
+        //    case 1:
+               
+        //        break;
+        //    case 2:
               
-                break;
-            case 3:
+        //        break;
+        //    case 3:
               
-                break;
-            default:
+        //        break;
+        //    default:
             
-                break;
-        }
+        //        break;
+        //}
+    }
+
+    void QuitGame()
+    {
+        Application.Quit();
     }
 }
